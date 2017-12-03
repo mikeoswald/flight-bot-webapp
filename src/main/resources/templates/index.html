@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
   <head>
 
@@ -8,7 +8,7 @@
     <meta name="description" content=""></meta>
     <meta name="author" content=""></meta>
 
-    <title>Landing Page - Start Bootstrap Theme</title>
+    <title>Register a Flight Bot</title>
 
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"></link>
@@ -28,8 +28,10 @@
     <!-- Navigation -->
     <nav class="navbar navbar-light bg-light static-top">
       <div class="container">
-        <a class="navbar-brand" href="#">Start Bootstrap</a>
-        <a class="btn btn-primary" href="#">Sign In</a>
+        <a class="navbar-brand" href="#">Flight Bot</a>
+        <form th:action="@{/logout}" method="post">
+          <input type="submit" value="Sign Out"/>
+        </form>
       </div>
     </nav>
 
@@ -42,15 +44,11 @@
             <h1 class="mb-5">Build a landing page for your business or project and generate more leads!</h1>
           </div>
           <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
-            <form>
-              <div class="form-row">
-                <div class="col-12 col-md-9 mb-2 mb-md-0">
-                  <input type="email" class="form-control form-control-lg" placeholder="Enter your email..."></input>
-                </div>
-                <div class="col-12 col-md-3">
-                  <button type="submit" class="btn btn-block btn-lg btn-primary">Sign up!</button>
-                </div>
-              </div>
+            <form action="/register-bot">
+              First name:<br></br>
+              <input type="text" name="firstname" value="Mickey"></input>
+              <br></br>
+              <input type="submit" value="Submit"></input>
             </form>
           </div>
         </div>
@@ -97,7 +95,7 @@
       <div class="container-fluid p-0">
         <div class="row no-gutters">
 
-          <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('img/bg-showcase-1.jpg');"></div>
+          <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('img/flightphoto.jpg');"></div>
           <div class="col-lg-6 order-lg-1 my-auto showcase-text">
             <h2>Fully Responsive Design</h2>
             <p class="lead mb-0">When you use a theme created by Start Bootstrap, you know that the theme will look great on any device, whether it's a phone, tablet, or desktop the page will behave responsively!</p>
