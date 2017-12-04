@@ -44,11 +44,18 @@
             <h1 class="mb-5">Build a landing page for your business or project and generate more leads!</h1>
           </div>
           <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
-            <form action="/register-bot">
-              First name:<br></br>
-              <input type="text" name="firstname" value="Mickey"></input>
-              <br></br>
-              <input type="submit" value="Submit"></input>
+            <form method="POST" id="register_bot_form">
+              <label>Email:</label>
+              <input type="text" name="email" id="email"/>
+              <label>Destination Airport Code:</label>
+              <input type="text" name="destination" id="destination"/>
+              <label>Origin Airport Code:</label>
+              <input type="text" name="origin" id="origin"/>
+              <label>Trip length:</label>
+              <input type="text" name="length" id="length"/>
+              <label>Season:</label>
+              <input type="text" name="season" id="season"/>
+              <input type="submit" value="Submit" name="submit" class="submit" id="submit" />
             </form>
           </div>
         </div>
@@ -222,6 +229,24 @@
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+  $(function() {
+    $('#register_bot_form').on('submit', function(e) {
+        e.preventDefault();  //prevent form from submitting
+        var data = $("#register_bot_form :input").serializeArray();
+        console.log(data); //use the console for debugging, F12 in Chrome, not alerts
+         $.ajax({
+            url: '/register-bot',
+            type: 'post',
+            dataType: 'json',
+            success: function (data) {
+                $('#target').html(data.msg);
+            },
+            data: data
+        });
+    });
+});
+</script>
 
   </body>
 
