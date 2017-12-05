@@ -7,6 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"></meta>
     <meta name="description" content=""></meta>
     <meta name="author" content=""></meta>
+    <head>
+      <meta name="_csrf" th:content="${_csrf.token}"/>
+      <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    </head>
 
     <title>Register a Flight Bot</title>
 
@@ -46,15 +50,15 @@
           <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
             <form method="POST" id="register_bot_form">
               <label>Email:</label>
-              <input type="text" name="email" id="email"/>
+              <input type="text" name="email" id="email"/><br></br>
               <label>Destination Airport Code:</label>
-              <input type="text" name="destination" id="destination"/>
+              <input type="text" name="destination" id="destination"/><br></br>
               <label>Origin Airport Code:</label>
-              <input type="text" name="origin" id="origin"/>
+              <input type="text" name="origin" id="origin"/><br></br>
               <label>Trip length:</label>
-              <input type="text" name="length" id="length"/>
+              <input type="text" name="length" id="length"/><br></br>
               <label>Season:</label>
-              <input type="text" name="season" id="season"/>
+              <input type="text" name="season" id="season"/><br></br>
               <input type="submit" value="Submit" name="submit" class="submit" id="submit" />
             </form>
           </div>
@@ -232,17 +236,34 @@
     <script>
   $(function() {
     $('#register_bot_form').on('submit', function(e) {
+      var token = $("meta[name='_csrf']").attr("content");
+      var header = $("meta[name='_csrf_header']").attr("content");
         e.preventDefault();  //prevent form from submitting
-        var data = $("#register_bot_form :input").serializeArray();
-        console.log(data); //use the console for debugging, F12 in Chrome, not alerts
+       // var data = $("#register_bot_form :input").serializeArray();
+      // var data = JSON.stringify($("#register_bot_form :input").serializeArray());
+       // var data = {"name": "John1"}
+       // console.log(data); //use the console for debugging, F12 in Chrome, not alerts
+
+        var data = {}
+			data["email"] = $("#email").val();
+			data["destination"] = $("#destination").val();
+			data["origin"] = $("#origin").val();
+			data["length"] = $("#length").val();
+			data["season"] = $("#season").val();
+
          $.ajax({
             url: '/register-bot',
             type: 'post',
+            contentType: "application/json",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            data: JSON.stringify(data),
             dataType: 'json',
+            timeout: 600000,
             success: function (data) {
                 $('#target').html(data.msg);
-            },
-            data: data
+            }
         });
     });
 });

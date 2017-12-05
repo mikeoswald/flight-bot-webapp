@@ -1,6 +1,7 @@
 package com.flight.bot.flightwebapp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.stereotype.Controller;
@@ -20,26 +21,22 @@ public class SimpleController {
     @Value("${spring.application.name}")
     String appName;
 
+    @Autowired
+    FlightBotDao flightBotDao;
+
     @GetMapping("/main")
     public String homePage(Model model) {
         model.addAttribute("appName", appName);
         return "index";
     }
 
-    @RequestMapping(value = "/register-bot", method = RequestMethod.POST)
+    @RequestMapping(value = "/register-bot", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public ModelAndView createNewUser(String json) throws IOException {
-        System.out.println( "BOT NAME YO: "+json);
-        ObjectMapper mapper = new ObjectMapper();
-        Bot bot = mapper.readValue("{\"name\": \"John1\"}", Bot.class);
+    public String createNewUser(@RequestBody Bot bot) throws IOException {
 
-        System.out.println(bot.getName()); //John1post
+        // add bot to database
+       boolean status = flightBotDao.addNewFlightBotDetails(bot);
 
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("successMessage", "User has been registered successfully");
-       // modelAndView.addObject("user", new SecurityProperties.User());
-        modelAndView.setViewName("registration");
-
-        return modelAndView;
+        return "Success";
     }
 }
