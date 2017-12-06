@@ -6,6 +6,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
 import java.io.IOException;
 
 /**
@@ -19,6 +23,9 @@ public class SimpleController {
     @Autowired
     FlightBotDao flightBotDao;
 
+    @Autowired
+    Message message;
+
     @GetMapping("/main")
     public String homePage(Model model) {
         model.addAttribute("appName", appName);
@@ -27,7 +34,7 @@ public class SimpleController {
 
     @RequestMapping(value = "/register-bot", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public String createNewUser(@RequestBody Bot bot) throws IOException {
+    public String createNewUser(@RequestBody Bot bot) throws IOException, MessagingException {
         //first check that the same combination isn't in there
         boolean isDuplicate = flightBotDao.isDuplicateFlightBotDetails(bot);
         if(isDuplicate){
@@ -35,9 +42,21 @@ public class SimpleController {
         } else {
             boolean status = flightBotDao.addNewFlightBotDetails(bot);
             if(status){
+                //send email
+                confirmationEmail(bot);
                 return "Your Flight Bot has been saved. You should receive a confirmation email at: "+ bot.getEmail() +" shortly.";
             } else
                 return "Something went wrong with saving your Flight Bot. Please try again.";
         }
+    }
+
+    private void confirmationEmail(Bot bot) throws MessagingException {
+        message.setFrom(new InternetAddress("michaelmoswald@gmail.com"));
+        message.setRecipients(Message.RecipientType.TO,
+                InternetAddress.parse(bot.getEmail()));
+        message.setSubject("New Flight Bot Created");
+        message.setText("Dear Mail Crawler,"
+                + "\n\n No spam to my email, please!");
+        Transport.send(message);
     }
 }
