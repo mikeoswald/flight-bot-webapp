@@ -43,7 +43,7 @@ public class FlightBotDaoImpl implements FlightBotDao {
                     "VALUES (?,?,?);";
             PreparedStatement pstmt = con.prepareStatement(query);
             pstmt.setString(1, uuid.toString());
-            pstmt.setString(2, "mikeoID");//need to query customers to get this, with (email)
+            pstmt.setString(2, bot.getEmail());//need to query customers to get this, with (email)
             jsonObject.setValue(jsonInString);
             pstmt.setObject(3, jsonObject);
             int i = pstmt.executeUpdate();
@@ -56,6 +56,38 @@ public class FlightBotDaoImpl implements FlightBotDao {
         }
         return result;
     }
+
+    @Override
+    public boolean isDuplicateFlightBotDetails(Bot bot) {
+        boolean result = false;
+        PGobject jsonObject = new PGobject();
+        jsonObject.setType("jsonb");
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonInString ="";
+        try {
+            jsonInString = mapper.writeValueAsString(bot);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        try {
+            Connection con = dataSource.getConnection();
+            String query = "Select useruniqueid from Positions where UserUniqueId =? " +
+                    "AND PositionDetails = ?";
+            PreparedStatement pstmt = con.prepareStatement(query);
+            pstmt.setString(1, bot.getEmail());//need to query customers to get this, with (email)
+            jsonObject.setValue(jsonInString);
+            pstmt.setObject(2, jsonObject);
+            ResultSet rs = pstmt.executeQuery();
+            result = rs.isBeforeFirst(); //if it has next then it is a duplicate
+            con.close();
+            pstmt.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
 
     @Override
     public boolean modFlightBotDetails(Bot bot) {

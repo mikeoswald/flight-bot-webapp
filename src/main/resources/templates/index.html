@@ -239,10 +239,6 @@
       var token = $("meta[name='_csrf']").attr("content");
       var header = $("meta[name='_csrf_header']").attr("content");
         e.preventDefault();  //prevent form from submitting
-       // var data = $("#register_bot_form :input").serializeArray();
-      // var data = JSON.stringify($("#register_bot_form :input").serializeArray());
-       // var data = {"name": "John1"}
-       // console.log(data); //use the console for debugging, F12 in Chrome, not alerts
 
         var data = {}
 			data["email"] = $("#email").val();
@@ -262,7 +258,7 @@
             dataType: 'json',
             timeout: 600000,
             success: function (data) {
-                $('#target').html(data.msg);
+                alert(data);
             }
         });
     });

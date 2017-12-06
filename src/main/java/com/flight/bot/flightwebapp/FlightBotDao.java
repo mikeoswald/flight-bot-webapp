@@ -7,6 +7,8 @@ interface FlightBotDao {
 
     boolean addNewFlightBotDetails(Bot bot);
 
+    boolean isDuplicateFlightBotDetails(Bot bot);
+
     boolean modFlightBotDetails(Bot bot);
 
 }
