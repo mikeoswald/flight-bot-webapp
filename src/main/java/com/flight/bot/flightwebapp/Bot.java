@@ -10,6 +10,15 @@ public class Bot {
     private String origin;
     private String length;
     private String season;
+    private String prices;
+
+    public String getPrices() {
+        return prices;
+    }
+
+    public void setPrices(String prices) {
+        this.prices = prices;
+    }
 
     public String getEmail() {
         return email;

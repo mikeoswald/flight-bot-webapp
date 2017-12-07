@@ -39,13 +39,14 @@ public class FlightBotDaoImpl implements FlightBotDao {
             Statement stmt = con.createStatement();
             UUID uuid = UUID.randomUUID();
             String json = "{\"name\": \"John1\"}";
-            String query = "INSERT INTO Positions (PositionId,UserUniqueId,PositionDetails)\n" +
-                    "VALUES (?,?,?);";
+            String query = "INSERT INTO Positions (PositionId,UserUniqueId,PositionDetails,ActiveBot)\n" +
+                    "VALUES (?,?,?,?);";
             PreparedStatement pstmt = con.prepareStatement(query);
             pstmt.setString(1, uuid.toString());
-            pstmt.setString(2, bot.getEmail());//need to query customers to get this, with (email)
+            pstmt.setString(2, bot.getEmail());
             jsonObject.setValue(jsonInString);
             pstmt.setObject(3, jsonObject);
+            pstmt.setString(4, "yes");
             int i = pstmt.executeUpdate();
             result = i > 0;
             con.close();
@@ -72,11 +73,12 @@ public class FlightBotDaoImpl implements FlightBotDao {
         try {
             Connection con = dataSource.getConnection();
             String query = "Select useruniqueid from Positions where UserUniqueId =? " +
-                    "AND PositionDetails = ?";
+                    "AND PositionDetails = ? AND ActiveBot= ?";
             PreparedStatement pstmt = con.prepareStatement(query);
             pstmt.setString(1, bot.getEmail());//need to query customers to get this, with (email)
             jsonObject.setValue(jsonInString);
             pstmt.setObject(2, jsonObject);
+            pstmt.setString(3,"yes");
             ResultSet rs = pstmt.executeQuery();
             result = rs.isBeforeFirst(); //if it has next then it is a duplicate
             con.close();
@@ -90,7 +92,7 @@ public class FlightBotDaoImpl implements FlightBotDao {
 
 
     @Override
-    public boolean modFlightBotDetails(Bot bot) {
+    public boolean modFlightBotDetails(Bot bot) { //TODO
         return false;
     }
 }
