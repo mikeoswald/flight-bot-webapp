@@ -55,8 +55,13 @@ public class SimpleController {
         message.setRecipients(Message.RecipientType.TO,
                 InternetAddress.parse(bot.getEmail()));
         message.setSubject("New Flight Bot Created");
-        message.setText("Dear Mail Crawler,"
-                + "\n\n No spam to my email, please!");
+        message.setText("Dear ,"+bot.getEmail()
+                + "\n\n Thanks for registering a new Flight Bot. Below are the details \n\n"+
+        "origin: "+bot.getOrigin()
+        +" desination: "+bot.getDestination()
+        + " trip duration: "+bot.getLength()
+        + " season: "+ bot.getSeason()+"\n\n Flight bot will check the flights for your and send " +
+                "you an email when a really good deal is found. Stay tuned! \n\n Thanks, Flight Bot");
         Transport.send(message);
     }
 }

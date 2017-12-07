@@ -14,7 +14,8 @@
         <div>
             Please login with the following: <br></br>
             User Name: username1 <br></br>
-            Password: password1 <br></br>
+            Password: <password1></password1> <br></br>
+            (Real login system not ready yet.)
         </div>
 
         <form th:action="@{/login}" method="post">
@@ -22,6 +23,5 @@
             <div><label> Password: <input type="password" name="password" value="password1"/> </label></div>
             <div><input type="submit" value="Sign In"/></div>
         </form>
-        (Real login system not ready yet.)
     </body>
 </html>
